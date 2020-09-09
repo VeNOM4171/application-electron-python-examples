@@ -12,7 +12,63 @@
 
     <title>Electron Application | mcm Algorithm</title>
     <script type="text/javascript" src="/eel.js"></script>
-    <script type="text/javascript" src="main.js"></script>
+   
+    <script type="text/javascript">
+      var num;
+      var prev;
+      var display_result;
+      var container;
+      var list = [];
+      function getMatriceNo(){
+        document.getElementById("submitbtn").style.display = "inline";
+        
+        num = document.getElementById("matrice_no").value;
+        container = document.getElementById("myContainerDiv");
+        hide();
+        
+        var i=0;
+        
+        for(i = 0; i < num; i++)
+        {
+            container.innerHTML += "<br/><input type=text id=box"+ (i+1) +"  placeholder="+"'Enter number of rows in matrix'"+ (i+1) +" style="+"'width: 300px;'"+"/> <br/>";
+        }
+        container.innerHTML +=  "<br/><input type ='text' id=box" + (i+1) + " placeholder=" + "'Enter number of columns in matrix'" + ""+ (i) +" style="+"'width: 300px;'"+"/> <br/>";
+        prev = 1;
+      }
+      function reset(){
+        hide()
+        document.getElementById("submitbtn").style.display = "none";
+        document.getElementById("resetbtn").style.display = "none";
+      }
+      
+      function hide(){
+        if(prev == 1)
+        {
+          container.innerHTML = "";
+          display_result.innerHTML = "";
+        }
+      }
+      function callPython(){
+        document.getElementById("resetbtn").style.display = "inline";
+        var i=0;
+        for(i = 0; i <= num; i++)
+        {   
+          list[i] = document.getElementById("box"+(i+1)).value;     
+        }
+        eel.start_algorithm(num, list)(display);
+      }
+     
+      
+      
+      function display(result){
+        console.log(result.string)
+        display_result = document.getElementById("showOutput");
+        display_result.innerHTML +="<br/><label>The number of scalar multiplications needed:  </label> " + " " + result.result + " <br/>";
+        display_result.innerHTML +="<br/><label>The Optimal parenthesization is: </label> "+ " " + result.string + "</label><br/>";
+        list = [];
+      }
+    </script>
+
     
   </head>
   <body>
@@ -41,7 +97,7 @@
         <form  class="mt-5">
           <label for="matriceNo">Enter number of matrices: </label>
           <input type="text" id='matrice_no' ><br>
-          <input type="button" class='submit' value="print text" onclick="getMatriceNo()"/>
+          <input type="button" class='submit' value="Input Dimension of Matrices" onclick="getMatriceNo()"/>
   
         </form>
     </div>
@@ -49,14 +105,21 @@
     <div class="container">
       <div class="row ">
         <div class="col">
-          <div id="myContainerDiv"></div>
-          <input type="button" class='submit mt-5' value="Submit" onclick="callPython()"/>
-    
+          <div id="myContainerDiv">
+           
+          </div>
+          <input id="submitbtn" type="button" class='submit mt-5' value="Submit" onclick="callPython()" style="display: none;"/>
+          <input id="resetbtn" type="button" class='submit mt-5' value="Clear" onclick="reset()" style="display: none;"/>
         </div>
         
       </div>
         
-    </div>     
+    </div> 
+     <div class="container">
+       <div id="showOutput">
+
+       </div>
+     </div>    
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
