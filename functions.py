@@ -1,5 +1,5 @@
 import eel
-from subprocess import Popen, PIPE
+
 # Set web files folder
 eel.init('web')
 string = ''
